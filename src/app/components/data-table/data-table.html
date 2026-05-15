@@ -1,0 +1,42 @@
+<div class="toolbar">
+  <div class="actions">
+    <button mat-raised-button color="primary" *ngIf="currentType === 'table'" (click)="openAddDialog()">Добавить</button>
+  </div>
+  <div class="filter">
+    <mat-form-field appearance="outline">
+      <mat-label>Быстрый фильтр</mat-label>
+      <input matInput [(ngModel)]="quickFilter" (keyup)="applyQuickFilter()">
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="specific-filters" *ngIf="filterFields.length">
+  <div *ngFor="let field of filterFields" class="filter-field">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ field }}</mat-label>
+      <input matInput [(ngModel)]="filters[field]" (keyup.enter)="applyFilters()">
+    </mat-form-field>
+  </div>
+  <button mat-raised-button (click)="applyFilters()">Применить</button>
+  <button mat-raised-button (click)="resetFilters()">Сбросить</button>
+</div>
+
+<div class="table-container">
+  <table mat-table [dataSource]="data" class="mat-elevation-z2">
+    <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
+      <th mat-header-cell *matHeaderCellDef> {{ col }} </th>
+      <td mat-cell *matCellDef="let row"> {{ row[col] }} </td>
+    </ng-container>
+
+    <ng-container *ngIf="currentType === 'table'" matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Действия </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-raised-button color="accent" (click)="editRow(row)">Ред.</button>
+        <button mat-raised-button color="warn" (click)="deleteRow(row)">Уд.</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="(currentType === 'table' ? ['actions', ...displayedColumns] : displayedColumns)"></tr>
+    <tr mat-row *matRowDef="let row; columns: (currentType === 'table' ? ['actions', ...displayedColumns] : displayedColumns);"></tr>
+  </table>
+</div>

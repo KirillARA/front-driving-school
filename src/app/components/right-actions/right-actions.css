@@ -1,0 +1,14 @@
+.buttons-container { 
+    padding: 8px; }
+.buttons-grid { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 12px; }
+.action-button {
+  flex: 0 0 calc(50% - 6px);
+  padding: 6px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  min-height: 32px;
+  text-align: center;
+}

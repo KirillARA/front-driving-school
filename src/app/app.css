@@ -1,0 +1,29 @@
+.app-container { 
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh; }
+.main-layout { 
+    display: flex; 
+    flex: 1; 
+    overflow: hidden; }
+.left-sidebar { 
+    width: 360px; 
+    background-color: #f5f5f5; 
+    overflow-y: auto; 
+    border-right: 1px solid #ddd; }
+.center-area {
+  flex: 2 1 0;        /* занимает 2 части от свободного пространства */
+  min-width: 500px;   /* минимальная ширина – 500px, чтобы не сжималась слишком сильно */
+  padding: 20px;
+  overflow-y: auto;
+  background-color: white;
+}
+
+.right-area {
+  flex: 1 1 320px;    /* правая панель занимает 1 часть, минимум 320px */
+  /* остальное как было */
+}
+.view-area { 
+    margin-top: 20px; 
+    border-top: 1px solid #ccc; 
+    padding: 16px; }

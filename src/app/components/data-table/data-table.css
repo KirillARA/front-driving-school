@@ -1,0 +1,31 @@
+.toolbar { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+  gap: 10px; }
+.actions { 
+  display: flex; 
+  gap: 10px; }
+.filter { 
+  min-width: 250px; }
+.table-container { 
+  overflow-x: auto; }
+.mat-mdc-cell, .mat-mdc-header-cell {
+  padding: 6px 8px !important;
+  font-size: 12px;
+}
+
+/* Уменьшаем размер кнопок в тулбаре, если нужно */
+.toolbar button {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+/* Поле фильтра можно сделать уже */
+.filter .mat-mdc-form-field {
+  width: 200px;
+}
+
+
+

@@ -1,0 +1,19 @@
+<div class="menu-container">
+  <div class="section">
+    <h3>Таблицы БД</h3>
+    <div class="buttons-grid">
+      <button mat-raised-button class="menu-button" *ngFor="let table of tables" (click)="selectTable(table.id)">
+        {{ table.label }}
+      </button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Представления</h3>
+    <div class="buttons-grid">
+      <button mat-raised-button class="menu-button" *ngFor="let view of views" (click)="selectView(view.id)">
+        {{ view.label }}
+      </button>
+    </div>
+  </div>
+</div>
