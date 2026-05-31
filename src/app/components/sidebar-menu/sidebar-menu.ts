@@ -12,7 +12,6 @@ import { StateService } from '../../services/state.service';
   styleUrls: ['./sidebar-menu.css']
 })
 export class SidebarMenu {
-  // Кнопки таблиц – ТОЛЬКО те, для которых есть реальные контроллеры на бэкенде
   tables = [
     { label: 'Сотрудники', id: 'employees' },
     { label: 'Категории прав', id: 'license-categories' },
@@ -30,7 +29,6 @@ export class SidebarMenu {
     { label: 'Принадлежность сотрудников', id: 'employee-categories' }
   ];
 
-  // Представления (если они есть в бэкенде – оставьте, если нет – удалите)
   views = [
     { label: 'Информация об учениках', id: 'students_info' },
     { label: 'Расписание вождения', id: 'driving_schedule' },

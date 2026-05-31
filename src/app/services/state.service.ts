@@ -7,7 +7,7 @@ export class StateService {
   private currentTypeSubject = new BehaviorSubject<'table' | 'view'>('table');
   currentType$ = this.currentTypeSubject.asObservable();
 
-  private currentIdSubject = new BehaviorSubject<string>('students');
+  private currentIdSubject = new BehaviorSubject<string>('');
   currentId$ = this.currentIdSubject.asObservable();
 
   setCurrentTable(tableId: string) {

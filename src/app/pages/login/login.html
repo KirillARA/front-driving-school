@@ -1,0 +1,47 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <h2>Авторизация</h2>
+
+    <mat-form-field
+      appearance="outline"
+      [color]="hasError ? 'warn' : 'primary'">
+
+      <mat-label>Логин</mat-label>
+
+      <input
+        matInput
+        [(ngModel)]="login">
+
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      [color]="hasError ? 'warn' : 'primary'">
+
+      <mat-label>Пароль</mat-label>
+
+      <input
+        matInput
+        type="password"
+        [(ngModel)]="password">
+
+      <mat-error *ngIf="hasError">
+        Неверный логин или пароль
+      </mat-error>
+
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="signIn()">
+
+      Войти
+
+    </button>
+
+  </div>
+
+</div>

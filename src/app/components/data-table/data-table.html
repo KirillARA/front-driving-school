@@ -1,42 +1,86 @@
 <div class="toolbar">
   <div class="actions">
-    <button mat-raised-button color="primary" *ngIf="currentType === 'table'" (click)="openAddDialog()">Добавить</button>
-  </div>
-  <div class="filter">
-    <mat-form-field appearance="outline">
-      <mat-label>Быстрый фильтр</mat-label>
-      <input matInput [(ngModel)]="quickFilter" (keyup)="applyQuickFilter()">
-    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="currentType === 'table' && currentId && currentId !== ''"
+      (click)="openAddDialog()">
+      Добавить
+    </button>
   </div>
 </div>
 
-<div class="specific-filters" *ngIf="filterFields.length">
-  <div *ngFor="let field of filterFields" class="filter-field">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ field }}</mat-label>
-      <input matInput [(ngModel)]="filters[field]" (keyup.enter)="applyFilters()">
-    </mat-form-field>
-  </div>
-  <button mat-raised-button (click)="applyFilters()">Применить</button>
-  <button mat-raised-button (click)="resetFilters()">Сбросить</button>
+<div *ngIf="currentId && currentId !== ''" class="section-title">
+  <h2>{{ getSectionTitle() }}</h2>
 </div>
 
-<div class="table-container">
+<!-- Фильтры – теперь с поддержкой select -->
+<div class="specific-filters" *ngIf="filterFields.length && currentId && currentId !== ''">
+  <div *ngFor="let filter of filterFields" class="filter-field">
+    <ng-container [ngSwitch]="filter.type">
+      <!-- TEXT поле с datalist -->
+      <mat-form-field appearance="outline" *ngSwitchCase="'text'">
+        <mat-label>{{ filter.label }}</mat-label>
+        <input matInput [(ngModel)]="filters[filter.key]" [attr.list]="filter.key + 'List'" autocomplete="off">
+        <datalist [id]="filter.key + 'List'">
+          <option *ngFor="let val of uniqueValues[filter.key]" [value]="val"></option>
+        </datalist>
+      </mat-form-field>
+
+      <!-- NUMBER поле -->
+      <mat-form-field appearance="outline" *ngSwitchCase="'number'">
+        <mat-label>{{ filter.label }}</mat-label>
+        <input matInput type="number" [(ngModel)]="filters[filter.key]">
+      </mat-form-field>
+
+      <!-- DATE поле -->
+      <mat-form-field appearance="outline" *ngSwitchCase="'date'">
+        <mat-label>{{ filter.label }}</mat-label>
+        <input matInput type="date" [(ngModel)]="filters[filter.key]">
+      </mat-form-field>
+
+      <!-- SELECT поле (выпадающий список) -->
+      <mat-form-field appearance="outline" *ngSwitchCase="'select'">
+        <mat-label>{{ filter.label }}</mat-label>
+        <mat-select [(ngModel)]="filters[filter.key]" (selectionChange)="applyFilters()">
+          <mat-option value="">Все</mat-option>
+          <mat-option *ngFor="let opt of filter.options" [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- На случай, если тип не определён – обычный текст -->
+      <mat-form-field appearance="outline" *ngSwitchDefault>
+        <mat-label>{{ filter.label }}</mat-label>
+        <input matInput [(ngModel)]="filters[filter.key]">
+      </mat-form-field>
+    </ng-container>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="applyFilters()">Применить</button>
+  <button mat-raised-button color="warn" (click)="resetFilters()">Сбросить</button>
+</div>
+
+<!-- ТАБЛИЦА -->
+<div *ngIf="currentId && currentId !== ''" class="table-container">
   <table mat-table [dataSource]="data" class="mat-elevation-z2">
+
+    <!-- ДИНАМИЧЕСКИЕ КОЛОНКИ -->
     <ng-container *ngFor="let col of displayedColumns" [matColumnDef]="col">
-      <th mat-header-cell *matHeaderCellDef> {{ col }} </th>
-      <td mat-cell *matCellDef="let row"> {{ row[col] }} </td>
+      <th mat-header-cell *matHeaderCellDef>{{ col }}</th>
+      <td mat-cell *matCellDef="let row">{{ row[col] }}</td>
     </ng-container>
 
+    <!-- ACTIONS -->
     <ng-container *ngIf="currentType === 'table'" matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Действия </th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-raised-button color="accent" (click)="editRow(row)">Ред.</button>
-        <button mat-raised-button color="warn" (click)="deleteRow(row)">Уд.</button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="(currentType === 'table' ? ['actions', ...displayedColumns] : displayedColumns)"></tr>
-    <tr mat-row *matRowDef="let row; columns: (currentType === 'table' ? ['actions', ...displayedColumns] : displayedColumns);"></tr>
+  <th mat-header-cell *matHeaderCellDef>Действия</th>
+  <td mat-cell *matCellDef="let row">
+    <button *ngIf="!noEditEntities.includes(currentId)" mat-raised-button color="accent" (click)="editRow(row)">Ред.</button>
+    <button mat-raised-button color="warn" (click)="deleteRow(row)">Уд.</button>
+  </td>
+</ng-container>
+    <tr mat-header-row *matHeaderRowDef="currentType === 'table' ? ['actions', ...displayedColumns] : displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: currentType === 'table' ? ['actions', ...displayedColumns] : displayedColumns;"></tr>
   </table>
 </div>

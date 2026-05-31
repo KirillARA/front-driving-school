@@ -27,5 +27,18 @@
   width: 200px;
 }
 
+.specific-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.filter-field {
+  flex: 1 1 200px;
+}
+.table-container {
+  overflow-x: auto;
+}
 
 
